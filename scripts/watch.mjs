@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 /**
- * Vault File Watcher
+ * Course File Watcher
  *
- * Watches the vault course folder for markdown changes and
+ * Watches the course folder for markdown changes and
  * re-runs the compiler. Vite picks up the JSON change via HMR.
  *
+ * Supports both ESF Faculty Toolkit and Obsidian vault layouts.
+ *
  * Usage:
- *   node scripts/watch.mjs [vault-path]
+ *   node scripts/watch.mjs [course-path]
  */
 
+import fs from "node:fs";
 import { watch } from "chokidar";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
@@ -24,19 +27,30 @@ const VAULT_PATH =
 
 if (!VAULT_PATH) {
   console.error(
-    "Error: No vault path provided.\n" +
+    "Error: No course path provided.\n" +
     "Usage: node scripts/watch.mjs /path/to/your/course/folder\n" +
     "   or: COURSE_VAULT_PATH=/path/to/course node scripts/watch.mjs"
   );
   process.exit(1);
 }
 
-// Directories to watch (skip research/, assets/slides/)
-const WATCH_DIRS = [
-  path.join(VAULT_PATH, "modules"),
-  path.join(VAULT_PATH, "projects"),
-  path.join(VAULT_PATH, "planning/syllabus"),
-];
+// Auto-detect layout and watch the right directories
+const isToolkit =
+  fs.existsSync(path.join(VAULT_PATH, "briefs")) ||
+  fs.existsSync(path.join(VAULT_PATH, "materials")) ||
+  fs.existsSync(path.join(VAULT_PATH, "syllabus.md"));
+
+const WATCH_DIRS = isToolkit
+  ? [
+      path.join(VAULT_PATH, "materials"),
+      path.join(VAULT_PATH, "briefs"),
+      path.join(VAULT_PATH, "syllabus.md"),
+    ].filter((d) => fs.existsSync(d))
+  : [
+      path.join(VAULT_PATH, "modules"),
+      path.join(VAULT_PATH, "projects"),
+      path.join(VAULT_PATH, "planning/syllabus"),
+    ].filter((d) => fs.existsSync(d));
 
 let debounceTimer = null;
 let compiling = false;

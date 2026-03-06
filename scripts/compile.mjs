@@ -2,13 +2,30 @@
 /**
  * Course Data Compiler
  *
- * Reads vault markdown files (syllabus, week modules, project briefs,
- * shared templates) and compiles them into src/data/course-data.json.
+ * Reads course content from markdown files and compiles them into
+ * src/data/course-data.json.
+ *
+ * Supports two directory layouts:
+ *
+ * 1. ESF Faculty Toolkit structure:
+ *      courses/{course}/
+ *      ├── syllabus.md
+ *      ├── materials/week-01.md, week-02.md, ...
+ *      └── briefs/project-01.md, project-02.md, ...
+ *
+ * 2. Obsidian vault structure:
+ *      {course}/
+ *      ├── planning/syllabus/  (Syllabus .md files)
+ *      ├── modules/            (week-N.md files)
+ *      ├── projects/project-N/ (00-brief.md per project)
+ *      └── projects/shared-templates/
+ *
+ * The compiler auto-detects which layout is present.
  *
  * Usage:
- *   node scripts/compile.mjs [vault-path]
+ *   node scripts/compile.mjs [course-path]
  *
- * Default vault path: set COURSE_VAULT_PATH env var, or pass as CLI argument
+ * Or set COURSE_VAULT_PATH env var.
  */
 
 import fs from "node:fs";
@@ -28,12 +45,45 @@ const VAULT_PATH =
 
 if (!VAULT_PATH) {
   console.error(
-    "Error: No vault path provided.\n" +
+    "Error: No course path provided.\n" +
     "Usage: node scripts/compile.mjs /path/to/your/course/folder\n" +
     "   or: COURSE_VAULT_PATH=/path/to/course node scripts/compile.mjs"
   );
   process.exit(1);
 }
+
+// ---------------------------------------------------------------------------
+// Layout detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Detect whether the given path uses the ESF Faculty Toolkit layout
+ * (briefs/, materials/, syllabus.md) or the Obsidian vault layout
+ * (planning/syllabus/, modules/, projects/).
+ *
+ * Returns "toolkit" or "vault".
+ */
+function detectLayout() {
+  // Toolkit indicators: briefs/ dir, materials/ dir, or top-level syllabus.md
+  const hasToolkitBriefs = fs.existsSync(path.join(VAULT_PATH, "briefs"));
+  const hasToolkitMaterials = fs.existsSync(path.join(VAULT_PATH, "materials"));
+  const hasTopLevelSyllabus = fs.existsSync(path.join(VAULT_PATH, "syllabus.md"));
+
+  // Vault indicators: modules/ dir, planning/syllabus/ dir, projects/ with subdirs
+  const hasModules = fs.existsSync(path.join(VAULT_PATH, "modules"));
+  const hasPlanSyllabus = fs.existsSync(path.join(VAULT_PATH, "planning", "syllabus"));
+
+  if (hasToolkitBriefs || hasToolkitMaterials || hasTopLevelSyllabus) {
+    return "toolkit";
+  }
+  if (hasModules || hasPlanSyllabus) {
+    return "vault";
+  }
+  // Default to toolkit (simpler structure, more likely for new users)
+  return "toolkit";
+}
+
+const LAYOUT = detectLayout();
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -230,7 +280,17 @@ function totalDuration(activities) {
 // ---------------------------------------------------------------------------
 
 function parseSyllabus() {
-  const files = glob.sync(path.join(VAULT_PATH, "planning/syllabus/*Syllabus*.md"));
+  let files;
+  if (LAYOUT === "toolkit") {
+    // Toolkit: syllabus.md at top level, or materials/syllabus*.md
+    files = glob.sync(path.join(VAULT_PATH, "syllabus.md"));
+    if (files.length === 0) {
+      files = glob.sync(path.join(VAULT_PATH, "materials/*syllabus*.md"), { nocase: true });
+    }
+  } else {
+    // Vault: planning/syllabus/*Syllabus*.md
+    files = glob.sync(path.join(VAULT_PATH, "planning/syllabus/*Syllabus*.md"));
+  }
   if (files.length === 0) {
     console.warn("  Warning: No syllabus found");
     return {};
@@ -450,7 +510,14 @@ function parseSyllabus() {
 }
 
 function parseWeekFiles() {
-  const pattern = path.join(VAULT_PATH, "modules/**/week-*.md");
+  let pattern;
+  if (LAYOUT === "toolkit") {
+    // Toolkit: materials/week-*.md (also match Week-*)
+    pattern = path.join(VAULT_PATH, "materials/[wW]eek-*.md");
+  } else {
+    // Vault: modules/**/week-*.md
+    pattern = path.join(VAULT_PATH, "modules/**/week-*.md");
+  }
   const files = readAllMarkdown(pattern);
   const weeks = [];
 
@@ -585,7 +652,14 @@ function parseWeekFiles() {
 }
 
 function parseProjects() {
-  const pattern = path.join(VAULT_PATH, "projects/project-*/00-brief.md");
+  let pattern;
+  if (LAYOUT === "toolkit") {
+    // Toolkit: briefs/project-*.md or briefs/*.md
+    pattern = path.join(VAULT_PATH, "briefs/*.md");
+  } else {
+    // Vault: projects/project-*/00-brief.md
+    pattern = path.join(VAULT_PATH, "projects/project-*/00-brief.md");
+  }
   const files = readAllMarkdown(pattern);
   const projects = [];
 
@@ -661,8 +735,18 @@ function parseProjects() {
       restrictions: aiUseStr || undefined,
     };
 
-    // Resources from companion file
-    const resourcesFile = file.path.replace("00-brief.md", "resources.md");
+    // Resources from companion file (vault: sibling resources.md; toolkit: briefs/resources-N.md)
+    let resourcesFile;
+    if (LAYOUT === "toolkit") {
+      // Try briefs/resources-01.md matching the project number
+      const projNum = String(projectNumber).padStart(2, "0");
+      resourcesFile = path.join(path.dirname(file.path), `resources-${projNum}.md`);
+      if (!fs.existsSync(resourcesFile)) {
+        resourcesFile = path.join(path.dirname(file.path), `resources-${projectNumber}.md`);
+      }
+    } else {
+      resourcesFile = file.path.replace("00-brief.md", "resources.md");
+    }
     const resources = [];
     if (fs.existsSync(resourcesFile)) {
       const resContent = fs.readFileSync(resourcesFile, "utf-8");
@@ -691,7 +775,16 @@ function parseProjects() {
     }
 
     // Sample work from companion file
-    const sampleFile = file.path.replace("00-brief.md", "sample-deliverables.md");
+    let sampleFile;
+    if (LAYOUT === "toolkit") {
+      const projNum = String(projectNumber).padStart(2, "0");
+      sampleFile = path.join(path.dirname(file.path), `sample-deliverables-${projNum}.md`);
+      if (!fs.existsSync(sampleFile)) {
+        sampleFile = path.join(path.dirname(file.path), `sample-deliverables-${projectNumber}.md`);
+      }
+    } else {
+      sampleFile = file.path.replace("00-brief.md", "sample-deliverables.md");
+    }
     const sampleWork = [];
     if (fs.existsSync(sampleFile)) {
       const sampleContent = fs.readFileSync(sampleFile, "utf-8");
@@ -730,7 +823,21 @@ function parseProjects() {
 }
 
 function parseTemplates() {
-  const templatesDir = path.join(VAULT_PATH, "projects/shared-templates");
+  // Toolkit: templates/ dir at course level or in parent repo
+  // Vault: projects/shared-templates/
+  let templatesDir;
+  if (LAYOUT === "toolkit") {
+    templatesDir = path.join(VAULT_PATH, "templates");
+    // Also check parent repo templates dir (faculty toolkit convention)
+    if (!fs.existsSync(templatesDir)) {
+      const parentTemplates = path.resolve(VAULT_PATH, "../../templates");
+      if (fs.existsSync(parentTemplates)) {
+        templatesDir = parentTemplates;
+      }
+    }
+  } else {
+    templatesDir = path.join(VAULT_PATH, "projects/shared-templates");
+  }
   const templates = {};
 
   // Position Statement
@@ -815,6 +922,7 @@ function buildCourseMap(weeks, projects) {
 
 function compile() {
   console.log(`Compiling course data from: ${VAULT_PATH}`);
+  console.log(`Detected layout: ${LAYOUT} (${LAYOUT === "toolkit" ? "ESF Faculty Toolkit" : "Obsidian vault"})`);
   console.log(`Output: ${OUTPUT_PATH}`);
 
   const syllabusData = parseSyllabus();

@@ -106,17 +106,35 @@ Unit colors are assigned automatically by position (unit 1 = violet, unit 2 = bl
 
 Light and dark themes are defined in `src/index.css` as CSS custom properties. Edit the `:root` and `.dark` blocks to match your institution's colors.
 
-### Vault Compiler
+### Compiler
 
-The compiler expects this vault structure:
+The compiler auto-detects which directory layout you use.
+
+**ESF Faculty Toolkit layout** (recommended for most faculty):
+
+```
+courses/my-course/
+├── syllabus.md               # Course syllabus with frontmatter
+├── materials/
+│   ├── week-01.md            # Weekly session plans
+│   ├── week-02.md
+│   └── ...
+└── briefs/
+    ├── project-01.md         # Project briefs
+    ├── project-02.md
+    └── ...
+```
+
+**Obsidian vault layout** (if you keep course content in an Obsidian vault):
 
 ```
 your-course/
 ├── planning/syllabus/*.md     # Syllabus with frontmatter
-├── modules/Week-*.md          # Weekly session plans
-└── projects/project-*/
-    ├── 00-brief.md            # Project briefs
-    └── resources.md           # Optional resources
+├── modules/week-*.md          # Weekly session plans
+├── projects/project-*/
+│   ├── 00-brief.md            # Project briefs
+│   └── resources.md           # Optional resources
+└── projects/shared-templates/ # Optional ESF templates
 ```
 
 For live recompilation during development:
@@ -125,7 +143,7 @@ For live recompilation during development:
 COURSE_VAULT_PATH=/path/to/course pnpm dev
 ```
 
-This runs Vite and the file watcher concurrently. Edits to vault files trigger JSON regeneration; Vite hot-reloads the changes.
+This runs Vite and the file watcher concurrently. Edits to course files trigger JSON regeneration; Vite hot-reloads the changes.
 
 ## Stack
 
