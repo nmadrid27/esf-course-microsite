@@ -1,0 +1,182 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+
+  /* Semantic tonal layers */
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-raised: var(--surface-raised);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-border-subtle: var(--border-subtle);
+  --color-hero-bg: var(--hero-bg);
+  --color-nav-bg: var(--nav-bg);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-highlight-border: var(--highlight-border);
+}
+
+/* ===== LIGHT THEME (default) ===== */
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --primary: #12112A;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #f1f5f9;
+    --accent-foreground: #0f172a;
+    --destructive: #ef4444;
+    --border: #e2e8f0;
+    --ring: #94a3b8;
+    --radius: 0.75rem;
+
+    /* Tonal layers - light */
+    --surface: #f8fafc;
+    --surface-hover: #f1f5f9;
+    --surface-raised: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #475569;
+    --text-muted: #64748b;
+    --text-faint: #94a3b8;
+    --border-subtle: #f1f5f9;
+    --hero-bg: #12112A;
+    --nav-bg: rgba(255, 255, 255, 0.75);
+    --highlight: #f5f3ff;
+    --highlight-foreground: #5b21b6;
+    --highlight-border: #ede9fe;
+
+    /* Sidebar */
+    --sidebar: #12112A;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #8b5cf6;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: rgba(255, 255, 255, 0.1);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgba(255, 255, 255, 0.1);
+    --sidebar-ring: #8b5cf6;
+  }
+}
+
+/* ===== DARK THEME ===== */
+@layer base {
+  .dark {
+    --background: #0B0A1A;
+    --foreground: #f1f5f9;
+    --card: #14132B;
+    --card-foreground: #f1f5f9;
+    --primary: #a78bfa;
+    --primary-foreground: #0B0A1A;
+    --secondary: #1e1d3a;
+    --secondary-foreground: #e2e8f0;
+    --muted: #1e1d3a;
+    --muted-foreground: #94a3b8;
+    --accent: #1e1d3a;
+    --accent-foreground: #e2e8f0;
+    --destructive: #ef4444;
+    --border: rgba(255, 255, 255, 0.1);
+    --ring: #8b5cf6;
+
+    /* Tonal layers - dark */
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-hover: rgba(255, 255, 255, 0.06);
+    --surface-raised: #14132B;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.80);
+    --text-tertiary: rgba(255, 255, 255, 0.70);
+    --text-muted: rgba(255, 255, 255, 0.60);
+    --text-faint: rgba(255, 255, 255, 0.50);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --hero-bg: #12112A;
+    --nav-bg: rgba(11, 10, 26, 0.75);
+    --highlight: rgba(139, 92, 246, 0.10);
+    --highlight-foreground: #c4b5fd;
+    --highlight-border: rgba(139, 92, 246, 0.20);
+
+    /* Sidebar */
+    --sidebar: #0B0A1A;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #8b5cf6;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: rgba(255, 255, 255, 0.1);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgba(255, 255, 255, 0.08);
+    --sidebar-ring: #8b5cf6;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1 {
+    font-weight: 500;
+  }
+
+  h2 {
+    font-weight: 500;
+  }
+
+  h3 {
+    font-weight: 500;
+  }
+
+  h4 {
+    font-weight: 500;
+  }
+}
+
+/* Portal card hover glow */
+.portal-glow {
+  transition: box-shadow 0.2s ease;
+}
+
+.portal-glow:hover {
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.15), 0 8px 25px -5px rgba(139, 92, 246, 0.12);
+}

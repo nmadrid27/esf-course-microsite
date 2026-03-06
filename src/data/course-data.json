@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "courseCode": "COURSE 101",
+    "courseTitle": "Your Course Title",
+    "quarter": "Spring",
+    "year": 2026,
+    "instructor": "Your Name",
+    "courseDescription": "Replace this with your course description. This template generates an interactive course microsite from structured JSON data.",
+    "totalWeeks": 10,
+    "hasESF": false,
+    "program": "Your Program"
+  },
+  "learningOutcomes": [
+    { "id": 1, "outcome": "Demonstrate understanding of core course concepts through applied projects." },
+    { "id": 2, "outcome": "Analyze and evaluate creative work using discipline-specific criteria." },
+    { "id": 3, "outcome": "Produce portfolio-ready artifacts that integrate course themes." }
+  ],
+  "courseStructure": {
+    "units": [
+      {
+        "unitNumber": 1,
+        "unitName": "Foundations",
+        "weeks": [1, 2, 3],
+        "theme": "Core concepts and skill building",
+        "aiPresent": false,
+        "description": "Establish foundational knowledge and vocabulary."
+      },
+      {
+        "unitNumber": 2,
+        "unitName": "Exploration",
+        "weeks": [4, 5, 6],
+        "theme": "Expanding methods and perspectives",
+        "aiPresent": true,
+        "description": "Apply concepts to new contexts and challenge assumptions."
+      },
+      {
+        "unitNumber": 3,
+        "unitName": "Integration",
+        "weeks": [7, 8],
+        "theme": "Connecting ideas across domains",
+        "aiPresent": true,
+        "description": "Synthesize learning into more complex outputs."
+      },
+      {
+        "unitNumber": 4,
+        "unitName": "Synthesis",
+        "weeks": [9, 10],
+        "theme": "Final projects and reflection",
+        "aiPresent": true,
+        "description": "Produce polished work and articulate your process."
+      }
+    ],
+    "cognitiveProgression": "The course moves from foundational skills through exploration and integration to final synthesis."
+  },
+  "grading": {
+    "components": [
+      { "component": "Project 1", "weight": 20, "description": "Foundational project", "dueWeek": 3 },
+      { "component": "Project 2", "weight": 25, "description": "Exploration project", "dueWeek": 6 },
+      { "component": "Project 3", "weight": 30, "description": "Integration project", "dueWeek": 9 },
+      { "component": "Project 4", "weight": 25, "description": "Final synthesis", "dueWeek": 10 }
+    ]
+  },
+  "courseMap": [
+    { "week": 1, "unit": "Foundations", "theme": "Introduction and Context", "activeProject": "P1", "keyDeliverable": "Setup complete" },
+    { "week": 2, "unit": "Foundations", "theme": "Core Methods", "activeProject": "P1", "keyDeliverable": "First draft" },
+    { "week": 3, "unit": "Foundations", "theme": "Application", "activeProject": "P1", "keyDeliverable": "P1 due" },
+    { "week": 4, "unit": "Exploration", "theme": "New Perspectives", "activeProject": "P2", "keyDeliverable": "Research phase" },
+    { "week": 5, "unit": "Exploration", "theme": "Experimentation", "activeProject": "P2", "keyDeliverable": "Prototype" },
+    { "week": 6, "unit": "Exploration", "theme": "Refinement", "activeProject": "P2", "keyDeliverable": "P2 due" },
+    { "week": 7, "unit": "Integration", "theme": "Cross-Domain Thinking", "activeProject": "P3", "keyDeliverable": "Concept development" },
+    { "week": 8, "unit": "Integration", "theme": "Complex Systems", "activeProject": "P3", "keyDeliverable": "Working draft" },
+    { "week": 9, "unit": "Synthesis", "theme": "Final Production", "activeProject": "P3", "keyDeliverable": "P3 due" },
+    { "week": 10, "unit": "Synthesis", "theme": "Presentation and Reflection", "activeProject": "P4", "keyDeliverable": "P4 due" }
+  ],
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "unitNumber": 1,
+      "unitName": "Foundations",
+      "theme": "Introduction and Context",
+      "overview": "Welcome to the course. This week establishes the core framework and vocabulary you will use throughout the quarter.",
+      "learningObjectives": ["Understand the course structure and expectations", "Complete initial setup tasks"],
+      "sessions": [
+        {
+          "sessionNumber": 1,
+          "sessionTitle": "Course Introduction",
+          "totalDuration": "60 min",
+          "activities": [
+            { "activityName": "Welcome and Overview", "duration": "15 min", "description": "Course structure, expectations, and the quarter roadmap." },
+            { "activityName": "Opening Activity", "duration": "30 min", "description": "Hands-on exercise introducing the course theme." },
+            { "activityName": "Setup and Tools", "duration": "15 min", "description": "Configure your workspace and tools for the quarter." }
+          ]
+        }
+      ],
+      "deliverables": [
+        { "deliverable": "Workspace setup", "dueDate": "End of Week 1" }
+      ],
+      "lookingAhead": "Next week we begin working with core methods."
+    }
+  ],
+  "projects": [
+    {
+      "projectNumber": 1,
+      "projectTitle": "Foundations Project",
+      "overview": "Apply foundational concepts to produce your first course artifact.",
+      "weight": "20%",
+      "weeks": [1, 2, 3],
+      "dueDate": "End of Week 3",
+      "aiUse": {
+        "allowed": false,
+        "restrictions": "No AI tools for this project. Establish your own baseline first."
+      },
+      "deliverables": ["Primary artifact", "Process documentation", "Reflection statement"],
+      "assessmentCriteria": ["Demonstrates understanding of core concepts", "Quality of process documentation", "Thoughtful reflection"],
+      "resources": []
+    },
+    {
+      "projectNumber": 2,
+      "projectTitle": "Exploration Project",
+      "overview": "Expand your methods by exploring new perspectives and tools.",
+      "weight": "25%",
+      "weeks": [4, 5, 6],
+      "dueDate": "End of Week 6",
+      "aiUse": {
+        "allowed": true,
+        "restrictions": "AI tools permitted for research and ideation. Document all AI use."
+      },
+      "deliverables": ["Primary artifact", "AI use documentation", "Process reflection"],
+      "assessmentCriteria": ["Range of exploration", "Quality of documentation", "Integration of new methods"],
+      "resources": []
+    },
+    {
+      "projectNumber": 3,
+      "projectTitle": "Integration Project",
+      "overview": "Synthesize learning from the first two units into a more complex output.",
+      "weight": "30%",
+      "weeks": [7, 8, 9],
+      "dueDate": "End of Week 9",
+      "aiUse": {
+        "allowed": true,
+        "restrictions": "Full AI collaboration permitted. Maintain clear documentation of human vs. AI contributions."
+      },
+      "deliverables": ["Portfolio-ready artifact", "Process documentation", "AI collaboration log"],
+      "assessmentCriteria": ["Complexity and depth", "Clear human authorship", "Quality of final output"],
+      "resources": []
+    },
+    {
+      "projectNumber": 4,
+      "projectTitle": "Final Synthesis",
+      "overview": "Present your best work and reflect on your growth across the quarter.",
+      "weight": "25%",
+      "weeks": [9, 10],
+      "dueDate": "End of Week 10",
+      "aiUse": {
+        "allowed": true,
+        "restrictions": "All tools available. Final presentation must demonstrate your own voice and judgment."
+      },
+      "deliverables": ["Final presentation", "Quarter reflection", "Portfolio selection"],
+      "assessmentCriteria": ["Clarity of presentation", "Evidence of growth", "Portfolio quality"],
+      "resources": []
+    }
+  ],
+  "templates": {
+    "positionStatement": {
+      "elements": ["My stance on AI in my creative practice", "What matters most to me", "What I will not compromise"],
+      "description": "A living document that records your evolving position on AI use in your work."
+    },
+    "aiUseLog": {
+      "sections": ["Position Statement", "Session Log", "Records of Resistance", "Contribution Summary"],
+      "description": "Track every AI interaction, what you accepted, what you rejected, and why."
+    },
+    "recordOfResistance": {
+      "fields": ["What AI suggested", "Why I rejected or revised it", "What I did instead"],
+      "description": "Document moments where you deliberately chose a different path than AI recommended."
+    }
+  },
+  "policies": {
+    "aiUse": {
+      "unitProgression": [
+        { "unit": "Foundations", "weeks": "1 to 3", "aiStatus": "Prohibited", "guidance": "Establish your own baseline without AI augmentation." },
+        { "unit": "Exploration", "weeks": "4 to 6", "aiStatus": "Permitted with documentation", "guidance": "AI tools allowed for research and ideation. Document all use." },
+        { "unit": "Integration", "weeks": "7 to 8", "aiStatus": "Encouraged", "guidance": "Use AI as a creative collaborator. Maintain clear authorship." },
+        { "unit": "Synthesis", "weeks": "9 to 10", "aiStatus": "Full access", "guidance": "All tools available. Your judgment determines what you use and how." }
+      ],
+      "projectMatrix": [
+        { "project": "P1", "consultative": "Prohibited", "transformative": "Prohibited", "generativePrimary": "Prohibited" },
+        { "project": "P2", "consultative": "Allowed", "transformative": "Allowed", "generativePrimary": "Prohibited" },
+        { "project": "P3", "consultative": "Allowed", "transformative": "Allowed", "generativePrimary": "Allowed" },
+        { "project": "P4", "consultative": "Allowed", "transformative": "Allowed", "generativePrimary": "Allowed" }
+      ],
+      "principles": [
+        "AI is a tool, not a collaborator with agency. You remain the author.",
+        "Document every AI interaction so your process is transparent and defensible.",
+        "The goal is not to avoid AI but to use it with intention and awareness."
+      ]
+    },
+    "lateWork": "Late submissions receive a 10% penalty per day. Extensions require advance communication with the instructor.",
+    "attendance": "Attendance is expected for all sessions. More than two unexcused absences may affect your grade."
+  }
+}
