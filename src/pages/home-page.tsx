@@ -32,6 +32,7 @@ export function HomePage({ data }: HomePageProps) {
         <>
             <CourseOverview
                 metadata={data.metadata}
+                site={data.site}
                 outcomes={data.learningOutcomes}
                 grading={data.grading.components}
                 structure={data.courseStructure}
@@ -42,7 +43,7 @@ export function HomePage({ data }: HomePageProps) {
                 <CourseMap entries={data.courseMap} courseCode={data.metadata.courseCode} />
 
                 <section id="weeks">
-                    <WeekAccordion weeks={data.weeks} />
+                    <WeekAccordion weeks={data.weeks} projects={data.projects} />
                 </section>
 
                 <section id="projects">

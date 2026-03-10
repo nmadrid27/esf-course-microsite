@@ -1,10 +1,11 @@
-import type { CourseMetadata, LearningOutcome, GradingComponent, CourseStructure, Project } from "@/types"
+import type { CourseMetadata, LearningOutcome, GradingComponent, CourseStructure, Project, SiteConfig } from "@/types"
 import { getUnitStyle } from "@/lib/unit-colors"
 import { Brain, Zap, Eye, Layers } from "lucide-react"
 import { DeadlineCards } from "./deadline-cards"
 
 interface CourseOverviewProps {
   metadata: CourseMetadata
+  site?: SiteConfig
   outcomes: LearningOutcome[]
   grading: GradingComponent[]
   structure: CourseStructure
@@ -47,7 +48,7 @@ function smoothScrollTo(id: string) {
   }
 }
 
-export function CourseOverview({ metadata, outcomes, grading, structure, projects }: CourseOverviewProps) {
+export function CourseOverview({ metadata, site, outcomes, grading, structure, projects }: CourseOverviewProps) {
   const totalWeight = grading.reduce((sum, g) => sum + g.weight, 0)
 
   return (
@@ -61,7 +62,7 @@ export function CourseOverview({ metadata, outcomes, grading, structure, project
         <div className="relative z-10 mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-12 space-y-6">
           {/* Program pill */}
           <span className="inline-block text-xs md:text-sm font-semibold tracking-wider uppercase bg-white/10 text-white/80 rounded-full px-4 py-1.5 backdrop-blur-sm border border-white/20">
-            {metadata.program ?? "Applied AI Program"} · {metadata.quarter} {metadata.year}
+            {metadata.program ?? metadata.courseCode} · {metadata.quarter} {metadata.year}
           </span>
 
           {/* Title */}
@@ -75,18 +76,20 @@ export function CourseOverview({ metadata, outcomes, grading, structure, project
           </p>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 pt-4">
-            {["Non-technical", "No coding required", "AI introduced progressively", `${metadata.totalWeeks} weeks`].map(
-              (tag) => (
-                <span
-                  key={tag}
-                  className="text-sm font-medium bg-white/10 text-white/80 rounded-full px-4 py-1.5 backdrop-blur-sm border border-white/10"
-                >
-                  {tag}
-                </span>
-              )
-            )}
-          </div>
+          {(site?.heroTags ?? [`${metadata.totalWeeks} weeks`]).length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-4">
+              {(site?.heroTags ?? [`${metadata.totalWeeks} weeks`]).map(
+                (tag) => (
+                  <span
+                    key={tag}
+                    className="text-sm font-medium bg-white/10 text-white/80 rounded-full px-4 py-1.5 backdrop-blur-sm border border-white/10"
+                  >
+                    {tag}
+                  </span>
+                )
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -94,7 +97,7 @@ export function CourseOverview({ metadata, outcomes, grading, structure, project
       <div className="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-12 space-y-12">
 
         {/* Deadline Cards */}
-        <DeadlineCards projects={projects} />
+        <DeadlineCards projects={projects} units={structure.units} />
 
         {/* 2–3. About + Learning Outcomes (3-col bento on wide screens) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -104,20 +107,20 @@ export function CourseOverview({ metadata, outcomes, grading, structure, project
             <p className="text-base text-text-tertiary leading-relaxed">{metadata.courseDescription}</p>
 
             {/* Positioning callout */}
-            <div className="bg-highlight border border-highlight-border rounded-xl px-6 py-4">
-              <p className="text-sm font-medium text-violet-300 leading-relaxed">
-                AI 180 is the THINK phase of the Applied AI degree. The course does not treat AI as the subject
-                matter. It treats your thinking as the subject matter. AI is one tool among many; introduced
-                only after you have mapped your own cognitive patterns.
-              </p>
-            </div>
+            {site?.positioningCallout && (
+              <div className="bg-highlight border border-highlight-border rounded-xl px-6 py-4">
+                <p className="text-sm font-medium text-violet-300 leading-relaxed">
+                  {site.positioningCallout}
+                </p>
+              </div>
+            )}
 
             {/* Non-technical note */}
-            <p className="text-base text-text-muted italic bg-surface rounded-2xl px-8 py-5 leading-relaxed">
-              No prior AI experience or technical background is required. If you completed AI 101, you are well
-              positioned. If you did not, you will catch up quickly. The course is designed for creative thinkers,
-              not engineers.
-            </p>
+            {site?.nonTechnicalNote && (
+              <p className="text-base text-text-muted italic bg-surface rounded-2xl px-8 py-5 leading-relaxed">
+                {site.nonTechnicalNote}
+              </p>
+            )}
           </div>
 
           {/* Learning Outcomes — 1 col */}
@@ -210,12 +213,12 @@ export function CourseOverview({ metadata, outcomes, grading, structure, project
             })}
           </div>
 
-          {/* Unit 1 rationale */}
-          <p className="text-base text-text-muted italic bg-surface rounded-2xl px-8 py-5 leading-relaxed mt-6">
-            AI is intentionally absent in Unit 1. You observe your own thinking first, without outside
-            augmentation. This is not a restriction — it is the pedagogical foundation that makes the rest of
-            the course meaningful.
-          </p>
+          {/* Unit rationale */}
+          {site?.unitRationale && (
+            <p className="text-base text-text-muted italic bg-surface rounded-2xl px-8 py-5 leading-relaxed mt-6">
+              {site.unitRationale}
+            </p>
+          )}
         </div>
 
         {/* 5–6. Grading + Quick Links (3-col: grading spans 1, quick links span 2) */}

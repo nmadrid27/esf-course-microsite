@@ -10,6 +10,12 @@
     "hasESF": false,
     "program": "Your Program"
   },
+  "site": {
+    "heroTags": ["10 weeks", "Portfolio-driven"],
+    "positioningCallout": "Replace this with a short statement about what makes this course distinctive and how it fits in your program.",
+    "nonTechnicalNote": "Replace this with any prerequisites or background information students should know before starting.",
+    "unitRationale": "Replace this with a brief explanation of the pedagogical reasoning behind your unit structure."
+  },
   "learningOutcomes": [
     { "id": 1, "outcome": "Demonstrate understanding of core course concepts through applied projects." },
     { "id": 2, "outcome": "Analyze and evaluate creative work using discipline-specific criteria." },

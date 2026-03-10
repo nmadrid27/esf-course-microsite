@@ -1,5 +1,6 @@
 export interface CourseData {
   metadata: CourseMetadata
+  site?: SiteConfig
   learningOutcomes: LearningOutcome[]
   courseStructure: CourseStructure
   grading: Grading
@@ -11,6 +12,13 @@ export interface CourseData {
   esfIntegration?: EsfIntegration
   vocabulary?: VocabularyEntry[]
   researchFoundations?: ResearchEntry[]
+}
+
+export interface SiteConfig {
+  heroTags?: string[]
+  positioningCallout?: string
+  nonTechnicalNote?: string
+  unitRationale?: string
 }
 
 export interface CourseMetadata {

@@ -42,7 +42,11 @@ const STATIC_NAV_ITEMS = [
   { id: "policies", label: "Policies", icon: ScrollText },
 ]
 
-const SUBMISSION_WEEKS = [3, 6, 9, 10]
+function getSubmissionWeeks(data: CourseData): number[] {
+  return data.projects
+    .filter((p) => p.weeks.length > 0)
+    .map((p) => Math.max(...p.weeks))
+}
 
 function getActiveUnitForSection(
   activeSection: string,
@@ -56,12 +60,14 @@ function getActiveUnitForSection(
 
 export function SidebarNav({ data, activeSection }: SidebarNavProps) {
   const activeUnit = getActiveUnitForSection(activeSection, data.weeks)
+  const submissionWeeks = getSubmissionWeeks(data)
+  const firstUnitName = data.courseStructure.units[0]?.unitName ?? ""
 
   // Start with the active unit open, or the first unit
   const [openUnits, setOpenUnits] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
     for (const unit of data.courseStructure.units) {
-      initial[unit.unitName] = unit.unitName === (activeUnit ?? "Know Yourself")
+      initial[unit.unitName] = unit.unitName === (activeUnit ?? firstUnitName)
     }
     return initial
   })
@@ -88,7 +94,7 @@ export function SidebarNav({ data, activeSection }: SidebarNavProps) {
           </div>
           <div className="min-w-0">
             <p className="text-sidebar-foreground/50 text-xs uppercase tracking-widest leading-none mb-0.5">
-              Applied AI
+              {data.metadata.program ?? data.metadata.courseCode}
             </p>
             <p className="text-sidebar-foreground font-semibold text-sm leading-none">
               {data.metadata.courseCode}
@@ -176,7 +182,7 @@ export function SidebarNav({ data, activeSection }: SidebarNavProps) {
                         {unitWeeks.map((week) => {
                           const isWeekActive =
                             activeSection === `week-${week.weekNumber}`
-                          const isSubmission = SUBMISSION_WEEKS.includes(
+                          const isSubmission = submissionWeeks.includes(
                             week.weekNumber
                           )
 

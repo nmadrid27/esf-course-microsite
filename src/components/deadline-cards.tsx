@@ -1,19 +1,21 @@
-import type { Project } from "@/types"
+import type { Project, Unit } from "@/types"
 import { getUnitStyle } from "@/lib/unit-colors"
 import { CalendarClock } from "lucide-react"
 
 interface DeadlineCardsProps {
   projects: Project[]
+  units: Unit[]
 }
 
-const PROJECT_UNIT_MAP: Record<number, string> = {
-  1: "Know Yourself",
-  2: "Expand Your Range",
-  3: "See the System",
-  4: "Integrate",
+function getUnitForProject(project: Project, units: Unit[]): string {
+  const firstWeek = Math.min(...project.weeks)
+  for (const unit of units) {
+    if (unit.weeks.includes(firstWeek)) return unit.unitName
+  }
+  return units[0]?.unitName ?? "Unit"
 }
 
-export function DeadlineCards({ projects }: DeadlineCardsProps) {
+export function DeadlineCards({ projects, units }: DeadlineCardsProps) {
   // Show all projects as upcoming deadlines, sorted by project number
   const deadlines = [...projects]
     .sort((a, b) => a.projectNumber - b.projectNumber)
@@ -30,7 +32,7 @@ export function DeadlineCards({ projects }: DeadlineCardsProps) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {deadlines.map((project) => {
-          const unitName = PROJECT_UNIT_MAP[project.projectNumber] ?? "Know Yourself"
+          const unitName = getUnitForProject(project, units)
           const style = getUnitStyle(unitName)
 
           return (

@@ -53,7 +53,7 @@ export function TopNav({ data, activeSection }: TopNavProps) {
           </div>
           <div className="hidden sm:block">
             <p className="text-[10px] font-bold tracking-widest text-text-muted uppercase leading-none mb-1">
-              Applied AI / {data.metadata.courseCode}
+              {data.metadata.program ?? "Course"} / {data.metadata.courseCode}
             </p>
             <h1 className="text-sm font-bold leading-none text-text-primary">
               {data.metadata.courseTitle}

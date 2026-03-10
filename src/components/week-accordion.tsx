@@ -1,16 +1,23 @@
-import { useState } from "react"
-import type { Week } from "@/types"
+import { useState, useMemo } from "react"
+import type { Week, Project } from "@/types"
 import { getUnitStyle } from "@/lib/unit-colors"
 import { ChevronDown, ChevronUp, Clock, Package, Sparkles } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface WeekAccordionProps {
   weeks: Week[]
+  projects?: Project[]
 }
 
-const SUBMISSION_WEEKS = new Set([3, 6, 9, 10])
-
-export function WeekAccordion({ weeks }: WeekAccordionProps) {
+export function WeekAccordion({ weeks, projects = [] }: WeekAccordionProps) {
+  // Derive submission weeks from project due weeks (last week in each project's span)
+  const submissionWeeks = useMemo(() => {
+    const set = new Set<number>()
+    for (const p of projects) {
+      if (p.weeks.length > 0) set.add(Math.max(...p.weeks))
+    }
+    return set
+  }, [projects])
   const [openWeek, setOpenWeek] = useState<number | null>(null)
 
   function toggleWeek(weekNumber: number) {
@@ -24,7 +31,7 @@ export function WeekAccordion({ weeks }: WeekAccordionProps) {
         {weeks.map((week) => {
           const style = getUnitStyle(week.unitName)
           const isOpen = openWeek === week.weekNumber
-          const isSubmission = SUBMISSION_WEEKS.has(week.weekNumber)
+          const isSubmission = submissionWeeks.has(week.weekNumber)
 
           // applyIt is not present in the current data model; guard defensively
           const applyIt = (week as unknown as Record<string, unknown>).applyIt as
